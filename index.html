@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maa Vaishnav Jewellers | Premium Gold & Diamonds</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F9E498;
+            --pure-black: #000000;
+        }
+        
+        body {
+            background-color: var(--pure-black);
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .cinzel { font-family: 'Cinzel', serif; }
+        
+        .gold-gradient {
+            background: linear-gradient(45deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-border {
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .gold-button {
+            background: linear-gradient(45deg, #D4AF37, #AA771C);
+            transition: all 0.3s ease;
+        }
+
+        .gold-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.9));
+        }
+
+        /* Animated Left Scroll Bar */
+        .scroll-track {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 150px;
+            background: rgba(212, 175, 55, 0.1);
+            z-index: 100;
+            border-radius: 10px;
+        }
+
+        .scroll-thumb {
+            width: 100%;
+            height: 0%;
+            background: var(--gold);
+            box-shadow: 0 0 10px var(--gold);
+            border-radius: 10px;
+            transition: height 0.1s linear;
+        }
+
+        @media (max-width: 768px) {
+            .scroll-track { left: 10px; height: 100px; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+
+        /* --- GENIE STYLE MOBILE NAV ADDITIONS --- */
+        #genieNav {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 90;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            overflow: hidden;
+            /* Initial State: Thin line anchored to top-right button area */
+            clip-path: inset(40px 5% 100% 85% round 20px);
+            transition: clip-path 0.7s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.4s;
+            opacity: 0;
+        }
+
+        #genieNav.is-open {
+            opacity: 1;
+            pointer-events: auto;
+            /* Expanded State: Full screen with relaxed corners */
+            clip-path: inset(0% 0% 0% 0% round 0px);
+            transition: clip-path 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.2s;
+        }
+
+        .genie-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        #genieNav.is-open .genie-item {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Staggered Delay for Menu Items */
+        #genieNav.is-open .genie-item:nth-child(1) { transition-delay: 0.4s; }
+        #genieNav.is-open .genie-item:nth-child(2) { transition-delay: 0.5s; }
+        #genieNav.is-open .genie-item:nth-child(3) { transition-delay: 0.6s; }
+        #genieNav.is-open .genie-item:nth-child(4) { transition-delay: 0.7s; }
+
+        .no-scroll { overflow: hidden; }
+
+        /* --- WHATSAPP FLOATING BUTTON STYLES --- */
+        .wa-float-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 80; /* Lower than Genie Nav (90) but high enough */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .wa-bubble {
+            background: #111;
+            border: 1px solid var(--gold);
+            padding: 8px 16px;
+            border-radius: 8px 8px 0 8px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+
+        /* Show bubble on hover or after delay */
+        .wa-float-container:hover .wa-bubble, 
+        .wa-bubble.show-initially {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .wa-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #111 0%, #000 100%);
+            border: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wa-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .wa-icon {
+            width: 32px;
+            height: 32px;
+            fill: var(--gold);
+            transition: fill 0.3s;
+        }
+        
+        .wa-button:hover .wa-icon {
+            fill: #fff;
+        }
+        
+        /* Green pulse ring behind the button */
+        .wa-pulse {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid var(--gold);
+            animation: pulse-ring 2s infinite;
+            z-index: -1;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
+        }
+
+        @media (max-width: 640px) {
+            .wa-float-container { bottom: 1.5rem; right: 1.5rem; }
+            .wa-button { width: 50px; height: 50px; }
+            .wa-icon { width: 26px; height: 26px; }
+            .wa-bubble { display: none; } /* Hide text on small mobile to save space */
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <div class="scroll-track">
+        <div id="scrollIndicator" class="scroll-thumb"></div>
+    </div>
+
+    <nav class="fixed w-full z-[100] bg-black/80 backdrop-blur-md border-b border-white/10 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="cinzel text-xl md:text-2xl font-bold gold-gradient tracking-widest">
+                MAA VAISHNAV JEWELLERS
+            </h1>
+            
+            <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#collections" class="nav-link">Collections</a>
+                <a href="#contact" class="nav-link">Location</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="tel:09935355755" class="gold-button text-black px-5 py-2 rounded-sm text-xs font-bold uppercase tracking-tighter">
+                    Call Now
+                </a>
+                
+                <button id="mobileTrigger" class="md:hidden text-gold focus:outline-none p-1" aria-label="Toggle Menu">
+                    <svg id="burgerIcon" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path id="bar1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 8h16" />
+                        <path id="bar2" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="genieNav">
+        <div class="flex flex-col items-center space-y-8">
+            <a href="#home" class="genie-item cinzel text-3xl gold-gradient uppercase tracking-[0.2em]">Home</a>
+            <a href="#collections" class="genie-item cinzel text-3xl text-white hover:text-gold transition-colors uppercase tracking-[0.2em]">Collections</a>
+            <a href="#contact" class="genie-item cinzel text-3xl text-white hover:text-gold transition-colors uppercase tracking-[0.2em]">Location</a>
+            <div class="genie-item pt-8 border-t border-white/10 flex flex-col items-center">
+                <p class="text-xs text-gray-500 uppercase tracking-widest mb-4">Inquiries</p>
+                <a href="tel:09935355755" class="text-gold font-bold text-xl">09935355755</a>
+            </div>
+        </div>
+    </div>
+
+    <section id="home" class="relative h-screen flex items-center justify-center text-center px-4 overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="w-full h-full bg-[url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center scale-105 opacity-50"></div>
+            <div class="absolute inset-0 hero-overlay"></div>
+        </div>
+        <div class="relative z-10 max-w-4xl">
+            <p class="cinzel text-gold tracking-[0.5em] mb-4 text-sm md:text-base animate-pulse">ESTABLISHED EXCELLENCE</p>
+            <h2 class="cinzel text-5xl md:text-7xl font-bold mb-6 gold-gradient uppercase">Pure Elegance, <br> Timeless Heritage</h2>
+            <p class="text-gray-300 mb-8 max-w-2xl mx-auto font-light leading-relaxed">
+                Discover a legacy of craftsmanship with our hand-curated collection of 22K Gold, Diamonds, and Precious Gems. Crafted for the divine in you.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#collections" class="gold-button text-black px-10 py-4 rounded-sm font-bold uppercase tracking-widest text-sm">View Collections</a>
+                <a href="tel:09935355755" class="border border-gold text-gold px-10 py-4 rounded-sm font-bold uppercase tracking-widest text-sm hover:bg-gold hover:text-black transition-all">Contact Now</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="collections" class="py-24 bg-black px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <h3 class="cinzel text-3xl md:text-5xl mb-16 gold-gradient uppercase">Signature Collections</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="group relative overflow-hidden gold-border aspect-[3/4]">
+                    <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=1920&auto=format&fit=crop" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110 opacity-70">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8 text-left">
+                        <h4 class="cinzel text-2xl text-gold">Bridal Gold</h4>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden gold-border aspect-[3/4]">
+                    <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1920&auto=format&fit=crop" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110 opacity-70">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8 text-left">
+                        <h4 class="cinzel text-2xl text-gold">Diamond Sets</h4>
+                    </div>
+                </div>
+                <div class="group relative overflow-hidden gold-border aspect-[3/4]">
+                    <img src="https://images.unsplash.com/photo-1635767798638-3e25273a8236?q=80&w=1920&auto=format&fit=crop" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110 opacity-70">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8 text-left">
+                        <h4 class="cinzel text-2xl text-gold">Heritage Silver</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 bg-black px-6">
+        <div class="max-w-3xl mx-auto text-center">
+            <h3 class="cinzel text-4xl mb-12 gold-gradient uppercase">Connect With Us</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="p-8 gold-border bg-[#0a0a0a]">
+                    <h5 class="cinzel text-gold text-lg mb-4 uppercase tracking-widest">Our Address</h5>
+                    <a href="https://maps.app.goo.gl/1ZAeZoCw5m4jsRQW7" target="_blank" class="gold-button text-black px-8 py-2 rounded-sm font-bold text-xs uppercase tracking-widest inline-block">Open Maps</a>
+                </div>
+                <div class="p-8 gold-border bg-[#0a0a0a]">
+                    <h5 class="cinzel text-gold text-lg mb-4 uppercase tracking-widest">Direct Line</h5>
+                    <a href="tel:09935355755" class="gold-button text-black px-8 py-2 rounded-sm font-bold text-xs uppercase tracking-widest inline-block">09935355755</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-black py-16 px-6 border-t border-white/10 text-center">
+        <h4 class="cinzel text-2xl gold-gradient font-bold mb-2 uppercase">MAA VAISHNAV JEWELLERS</h4>
+        <p class="text-gray-500 text-xs tracking-[0.5em] uppercase mb-8">Purity in every grain</p>
+        <p class="text-gray-600 text-[10px] uppercase tracking-[0.3em]">Owner: Mr. Vinay Soni | Built by Mr. Ansh Soni</p>
+    </footer>
+
+    <div class="wa-float-container group">
+        <div id="waBubble" class="wa-bubble">
+            <p class="cinzel text-gold text-xs uppercase font-bold tracking-widest">Chat with us</p>
+        </div>
+        <a href="https://wa.me/919935355755?text=Namaste%20🙏%0A%20Main%20aapki%20jewelry%20collection%20mein%20interested%20hoon%20✨%0A%20Kripya%20latest%20designs%20aur%20price%20details%20share%20karein%20💍%0A%20Dhanyavaad%20😊" target="_blank" class="wa-button" aria-label="Chat on WhatsApp">
+            <div class="wa-pulse"></div>
+            <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.585 1.961.893 3.056.893 3.179 0 5.769-2.587 5.769-5.766.001-3.181-2.59-5.78-5.77-5.78zm0 .9c2.665 0 4.846 2.182 4.846 4.881 0 2.67-2.182 4.866-4.847 4.866a4.835 4.835 0 0 1-2.484-.69l-.178-.106-1.593.417.426-1.554-.108-.172a4.815 4.815 0 0 1-.762-2.761c0-2.699 2.181-4.881 4.86-4.881zM17.8 1.8L16.2 0H7.8L6.2 1.8l-4 4.5v13.5l2 2h15.6l2-2V6.3l-4-4.5zM12 24c-6.627 0-12-5.373-12-12S5.373 0 12 0s12 5.373 12 12-5.373 12-12 12z" fill-rule="evenodd" clip-rule="evenodd" style="display:none;"/> <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            </svg>
+        </a>
+    </div>
+
+    <script>
+        // Scroll Indicator
+        window.onscroll = function() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            const indicator = document.getElementById("scrollIndicator");
+            if(indicator) indicator.style.height = scrolled + "%";
+        };
+
+        // Genie Nav Toggle Logic
+        const mobileTrigger = document.getElementById('mobileTrigger');
+        const genieNav = document.getElementById('genieNav');
+        const burgerIcon = document.getElementById('burgerIcon');
+        const bar1 = document.getElementById('bar1');
+        const bar2 = document.getElementById('bar2');
+        let menuActive = false;
+
+        mobileTrigger.addEventListener('click', () => {
+            menuActive = !menuActive;
+            
+            if (menuActive) {
+                genieNav.classList.add('is-open');
+                document.body.classList.add('no-scroll');
+                burgerIcon.style.transform = "rotate(180deg)";
+                bar1.setAttribute('d', 'M6 18L18 6');
+                bar2.setAttribute('d', 'M6 6l12 12');
+            } else {
+                genieNav.classList.remove('is-open');
+                document.body.classList.remove('no-scroll');
+                burgerIcon.style.transform = "rotate(0deg)";
+                bar1.setAttribute('d', 'M4 8h16');
+                bar2.setAttribute('d', 'M4 16h16');
+            }
+        });
+
+        // Close menu on link click
+        document.querySelectorAll('.genie-item').forEach(link => {
+            link.addEventListener('click', () => {
+                menuActive = false;
+                genieNav.classList.remove('is-open');
+                document.body.classList.remove('no-scroll');
+                burgerIcon.style.transform = "rotate(0deg)";
+                bar1.setAttribute('d', 'M4 8h16');
+                bar2.setAttribute('d', 'M4 16h16');
+            });
+        });
+
+        // Auto-show WhatsApp bubble after 3 seconds
+        setTimeout(() => {
+            const bubble = document.getElementById('waBubble');
+            if(bubble) bubble.classList.add('show-initially');
+            
+            // Hide it again after 5 seconds to not be annoying
+            setTimeout(() => {
+                if(bubble) bubble.classList.remove('show-initially');
+            }, 5000);
+        }, 3000);
+    </script>
+</body>
+</html>
