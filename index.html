@@ -1,410 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maa Vaishnav Jewellers | Premium Gold & Diamonds</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --gold: #D4AF37;
-            --gold-light: #F9E498;
-            --pure-black: #000000;
-        }
-        
-        body {
-            background-color: var(--pure-black);
-            color: #ffffff;
-            font-family: 'Montserrat', sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        .cinzel { font-family: 'Cinzel', serif; }
-        
-        .gold-gradient {
-            background: linear-gradient(45deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .gold-border {
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-
-        .gold-button {
-            background: linear-gradient(45deg, #D4AF37, #AA771C);
-            transition: all 0.3s ease;
-        }
-
-        .gold-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-        }
-
-        .nav-link::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 1px;
-            background: var(--gold);
-            transition: width 0.3s;
-        }
-        .nav-link:hover::after { width: 100%; }
-
-        .hero-overlay {
-            background: linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.9));
-        }
-
-        /* Animated Left Scroll Bar */
-        .scroll-track {
-            position: fixed;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 2px;
-            height: 150px;
-            background: rgba(212, 175, 55, 0.1);
-            z-index: 100;
-            border-radius: 10px;
-        }
-
-        .scroll-thumb {
-            width: 100%;
-            height: 0%;
-            background: var(--gold);
-            box-shadow: 0 0 10px var(--gold);
-            border-radius: 10px;
-            transition: height 0.1s linear;
-        }
-
-        @media (max-width: 768px) {
-            .scroll-track { left: 10px; height: 100px; }
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-
-        /* --- GENIE STYLE MOBILE NAV ADDITIONS --- */
-        #genieNav {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.98);
-            z-index: 90;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-            overflow: hidden;
-            /* Initial State: Thin line anchored to top-right button area */
-            clip-path: inset(40px 5% 100% 85% round 20px);
-            transition: clip-path 0.7s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.4s;
-            opacity: 0;
-        }
-
-        #genieNav.is-open {
-            opacity: 1;
-            pointer-events: auto;
-            /* Expanded State: Full screen with relaxed corners */
-            clip-path: inset(0% 0% 0% 0% round 0px);
-            transition: clip-path 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.2s;
-        }
-
-        .genie-item {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        #genieNav.is-open .genie-item {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Staggered Delay for Menu Items */
-        #genieNav.is-open .genie-item:nth-child(1) { transition-delay: 0.4s; }
-        #genieNav.is-open .genie-item:nth-child(2) { transition-delay: 0.5s; }
-        #genieNav.is-open .genie-item:nth-child(3) { transition-delay: 0.6s; }
-        #genieNav.is-open .genie-item:nth-child(4) { transition-delay: 0.7s; }
-
-        .no-scroll { overflow: hidden; }
-
-        /* --- WHATSAPP FLOATING BUTTON STYLES --- */
-        .wa-float-container {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 80; /* Lower than Genie Nav (90) but high enough */
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 10px;
-        }
-
-        .wa-bubble {
-            background: #111;
-            border: 1px solid var(--gold);
-            padding: 8px 16px;
-            border-radius: 8px 8px 0 8px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.4s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            pointer-events: none;
-        }
-
-        /* Show bubble on hover or after delay */
-        .wa-float-container:hover .wa-bubble, 
-        .wa-bubble.show-initially {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .wa-button {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #111 0%, #000 100%);
-            border: 2px solid var(--gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .wa-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.4);
-        }
-
-        .wa-icon {
-            width: 32px;
-            height: 32px;
-            fill: var(--gold);
-            transition: fill 0.3s;
-        }
-        
-        .wa-button:hover .wa-icon {
-            fill: #fff;
-        }
-        
-        /* Green pulse ring behind the button */
-        .wa-pulse {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 1px solid var(--gold);
-            animation: pulse-ring 2s infinite;
-            z-index: -1;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) scale(1.8); opacity: 0; }
-        }
-
-        @media (max-width: 640px) {
-            .wa-float-container { bottom: 1.5rem; right: 1.5rem; }
-            .wa-button { width: 50px; height: 50px; }
-            .wa-icon { width: 26px; height: 26px; }
-            .wa-bubble { display: none; } /* Hide text on small mobile to save space */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="Maa Vaishnav Jewellers — Purity in every grain. Explore our gold jewellery collection.">
+  <title>Maa Vaishnav Jewellers | Purity in Every Grain</title>
+  <style>
+    :root {
+      --bg:#090909; --panel:#11110f; --panel2:#171612; --gold:#c9a45c;
+      --gold-light:#efd49a; --text:#f4f0e7; --muted:#aaa397;
+      --line:rgba(201,164,92,.25); --max:1160px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:Georgia,"Times New Roman",serif;background:var(--bg);color:var(--text);line-height:1.65}
+    a{color:inherit;text-decoration:none}
+    button,input,textarea{font:inherit}
+    .container{width:min(var(--max),calc(100% - 40px));margin:auto}
+    .gold{color:var(--gold-light)}
+    .eyebrow{color:var(--gold);letter-spacing:.22em;text-transform:uppercase;font:600 11px Arial,sans-serif}
+    h1,h2,h3{font-weight:500;line-height:1.15}
+    h2{font-size:clamp(30px,5vw,48px);margin:12px 0 18px}
+    p{color:var(--muted)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 21px;border:1px solid var(--gold);background:var(--gold);color:#15120b;font:700 12px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:.25s}
+    .btn:hover{background:transparent;color:var(--gold-light)}
+    .btn.outline{background:transparent;color:var(--gold-light)}
+    .btn.outline:hover{background:var(--gold);color:#15120b}
+    header{position:sticky;top:0;z-index:20;background:rgba(9,9,9,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+    .nav{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand-mark{width:43px;height:43px;border:1px solid var(--gold);display:grid;place-items:center;color:var(--gold);font-size:22px}
+    .brand-name{font-size:19px;letter-spacing:.04em}
+    .brand-sub{font:10px Arial,sans-serif;letter-spacing:.2em;color:var(--gold);text-transform:uppercase}
+    nav{display:flex;align-items:center;gap:23px;font:12px Arial,sans-serif;color:#ddd}
+    nav a:hover{color:var(--gold-light)}
+    .menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--gold-light);padding:8px 12px}
+    .hero{min-height:650px;display:flex;align-items:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 75% 45%,rgba(154,111,42,.17),transparent 45%),linear-gradient(110deg,#090909 35%,#17130c 100%)}
+    .hero:after{content:"";position:absolute;right:-80px;top:10%;width:48vw;height:48vw;max-width:570px;max-height:570px;border:1px solid rgba(201,164,92,.18);border-radius:50%;box-shadow:0 0 0 28px rgba(201,164,92,.025),0 0 0 58px rgba(201,164,92,.02)}
+    .hero-content{position:relative;z-index:1;max-width:660px;padding:90px 0}
+    .hero h1{font-size:clamp(43px,7vw,78px);margin:18px 0 22px}
+    .hero p{max-width:570px;font-size:17px;margin-bottom:30px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+    section{padding:88px 0;border-bottom:1px solid rgba(201,164,92,.12)}
+    .section-intro{max-width:680px;margin-bottom:35px}
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center}
+    .shop-photo{width:100%;height:430px;object-fit:cover;border:1px solid var(--line);background:#17130c}
+    .about-copy p{margin:0 0 16px}
+    .feature-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+    .feature{padding:18px;border:1px solid var(--line);background:var(--panel)}
+    .feature strong{display:block;color:var(--gold-light);font-size:16px;margin-bottom:5px}
+    .feature span{font:11px Arial,sans-serif;color:var(--muted)}
+    .collection-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .collection-card{min-height:230px;padding:28px;border:1px solid var(--line);background:linear-gradient(145deg,#1b1710,#0d0d0c);display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
+    .collection-card:before{content:"✧";position:absolute;right:20px;top:10px;font-size:90px;color:rgba(201,164,92,.12)}
+    .collection-card h3{font-size:25px;color:var(--gold-light);margin-bottom:8px}
+    .collection-card p{font-size:14px}
+    .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .gallery-item{height:245px;background:linear-gradient(135deg,#302311,#0d0d0c);border:1px solid var(--line);display:grid;place-items:center;color:var(--gold);font-size:15px;text-align:center;padding:20px}
+    .gallery-item span{display:block;font-size:42px;margin-bottom:8px}
+    .hours-wrap{max-width:760px;border:1px solid var(--line);background:var(--panel);padding:25px}
+    .hours-table{width:100%;border-collapse:collapse;font:15px Arial,sans-serif}
+    .hours-table th,.hours-table td{padding:15px 12px;text-align:left;border-bottom:1px solid rgba(201,164,92,.14)}
+    .hours-table th{color:var(--gold-light);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+    .hours-table td:last-child{color:#e7d8b8}
+    .hours-note{font:12px Arial,sans-serif;margin:15px 12px 0;color:var(--muted)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px}
+    .contact-card{border:1px solid var(--line);background:var(--panel);padding:28px}
+    .contact-card h3{font-size:25px;color:var(--gold-light);margin-bottom:12px}
+    .contact-card p{margin-bottom:13px}
+    .contact-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+    .message-form{display:grid;gap:12px;margin-top:18px}
+    .message-form input,.message-form textarea{width:100%;background:#090909;border:1px solid var(--line);padding:13px;color:var(--text);outline:none}
+    .message-form input:focus,.message-form textarea:focus{border-color:var(--gold)}
+    .message-form textarea{min-height:125px;resize:vertical}
+    .form-status{min-height:22px;font:13px Arial,sans-serif;color:var(--gold-light)}
+    .reviews-note{padding:28px;border-left:2px solid var(--gold);background:var(--panel);max-width:760px}
+    footer{padding:38px 0 25px;text-align:center}
+    footer .owner{font:12px Arial,sans-serif;color:var(--muted);margin-top:12px}
+    .footer-links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:16px 0;font:12px Arial,sans-serif;color:var(--gold-light)}
+    .whatsapp-float{position:fixed;right:20px;bottom:20px;z-index:15;padding:13px 17px;background:#b99753;color:#111;font:700 12px Arial,sans-serif;box-shadow:0 8px 28px #0008}
+    @media(max-width:800px){
+      nav{display:none;position:absolute;top:78px;left:0;right:0;background:#0b0b0a;padding:20px;flex-direction:column;align-items:flex-start;border-bottom:1px solid var(--line)}
+      nav.open{display:flex}.menu-btn{display:block}
+      .about-grid,.contact-grid{grid-template-columns:1fr}
+      .collection-grid,.gallery-grid{grid-template-columns:repeat(2,1fr)}
+      .hero{min-height:560px}.hero:after{right:-220px;top:20%}
+    }
+    @media(max-width:520px){
+      .container{width:min(100% - 28px,var(--max))}
+      section{padding:65px 0}
+      .collection-grid,.gallery-grid,.feature-row{grid-template-columns:1fr}
+      .shop-photo{height:300px}
+      .hours-wrap{padding:12px}
+      .hours-table th,.hours-table td{padding:12px 8px;font-size:13px}
+      .whatsapp-float{right:12px;bottom:12px}
+    }
+  </style>
 </head>
-<body class="overflow-x-hidden">
-
-    <div class="scroll-track">
-        <div id="scrollIndicator" class="scroll-thumb"></div>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#home" aria-label="Maa Vaishnav Jewellers home">
+        <div class="brand-mark">✧</div>
+        <div><div class="brand-name">Maa Vaishnav Jewellers</div><div class="brand-sub">Purity in every grain</div></div>
+      </a>
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle navigation">☰ Menu</button>
+      <nav id="mainNav">
+        <a href="#home">Home</a><a href="#about">About</a><a href="#collections">Collections</a>
+        <a href="#gallery">Gallery</a><a href="#hours">Hours</a><a href="#reviews">Reviews</a><a href="#contact">Contact</a>
+      </nav>
     </div>
+  </header>
 
-    <nav class="fixed w-full z-[100] bg-black/80 backdrop-blur-md border-b border-white/10 px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <h1 class="cinzel text-xl md:text-2xl font-bold gold-gradient tracking-widest">
-                MAA VAISHNAV JEWELLERS
-            </h1>
-            
-            <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest">
-                <a href="#home" class="nav-link">Home</a>
-                <a href="#collections" class="nav-link">Collections</a>
-                <a href="#contact" class="nav-link">Location</a>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <a href="tel:09935355755" class="gold-button text-black px-5 py-2 rounded-sm text-xs font-bold uppercase tracking-tighter">
-                    Call Now
-                </a>
-                
-                <button id="mobileTrigger" class="md:hidden text-gold focus:outline-none p-1" aria-label="Toggle Menu">
-                    <svg id="burgerIcon" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 transition-transform duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path id="bar1" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 8h16" />
-                        <path id="bar2" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16h16" />
-                    </svg>
-                </button>
-            </div>
+  <main>
+    <section class="hero" id="home">
+      <div class="container hero-content">
+        <div class="eyebrow">Maa Vaishnav Jewellers</div>
+        <h1>Elegance that<br><span class="gold">lasts forever.</span></h1>
+        <p>Discover a legacy of craftsmanship with our hand-curated collection of 22K Gold, Diamonds, and Precious Gems. Crafted for the divine in you.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#collections">Explore Collection</a>
+          <a class="btn outline" href="https://wa.me/919935355755?text=Namaste%20🙏%0A%20Main%20aapki%20jewelry%20collection%20mein%20interested%20hoon%20✨%0A%20Kripya%20latest%20designs%20aur%20price%20details%20share%20karein%20💍%0A%20Dhanyavaad%20😊" target="_blank" rel="noopener">WhatsApp Us</a>
         </div>
-    </nav>
-
-    <div id="genieNav">
-        <div class="flex flex-col items-center space-y-8">
-            <a href="#home" class="genie-item cinzel text-3xl gold-gradient uppercase tracking-[0.2em]">Home</a>
-            <a href="#collections" class="genie-item cinzel text-3xl text-white hover:text-gold transition-colors uppercase tracking-[0.2em]">Collections</a>
-            <a href="#contact" class="genie-item cinzel text-3xl text-white hover:text-gold transition-colors uppercase tracking-[0.2em]">Location</a>
-            <div class="genie-item pt-8 border-t border-white/10 flex flex-col items-center">
-                <p class="text-xs text-gray-500 uppercase tracking-widest mb-4">Inquiries</p>
-                <a href="tel:09935355755" class="text-gold font-bold text-xl">09935355755</a>
-            </div>
-        </div>
-    </div>
-
-    <section id="home" class="relative h-screen flex items-center justify-center text-center px-4 overflow-hidden">
-        <div class="absolute inset-0 z-0">
-            <div class="w-full h-full bg-[url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center scale-105 opacity-50"></div>
-            <div class="absolute inset-0 hero-overlay"></div>
-        </div>
-        <div class="relative z-10 max-w-4xl">
-            <p class="cinzel text-gold tracking-[0.5em] mb-4 text-sm md:text-base animate-pulse">ESTABLISHED EXCELLENCE</p>
-            <h2 class="cinzel text-5xl md:text-7xl font-bold mb-6 gold-gradient uppercase">Pure Elegance, <br> Timeless Heritage</h2>
-            <p class="text-gray-300 mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-                Discover a legacy of craftsmanship with our hand-curated collection of 22K Gold, Diamonds, and Precious Gems. Crafted for the divine in you.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#collections" class="gold-button text-black px-10 py-4 rounded-sm font-bold uppercase tracking-widest text-sm">View Collections</a>
-                <a href="tel:09935355755" class="border border-gold text-gold px-10 py-4 rounded-sm font-bold uppercase tracking-widest text-sm hover:bg-gold hover:text-black transition-all">Contact Now</a>
-            </div>
-        </div>
+      </div>
     </section>
 
-    <section id="collections" class="py-24 bg-black px-6">
-        <div class="max-w-7xl mx-auto text-center">
-            <h3 class="cinzel text-3xl md:text-5xl mb-16 gold-gradient uppercase">Signature Collections</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="group relative overflow-hidden gold-border aspect-[3/4]">
-                    <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=1920&auto=format&fit=crop" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110 opacity-70">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8 text-left">
-                        <h4 class="cinzel text-2xl text-gold">Bridal Gold</h4>
-                    </div>
-                </div>
-                <div class="group relative overflow-hidden gold-border aspect-[3/4]">
-                    <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1920&auto=format&fit=crop" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110 opacity-70">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8 text-left">
-                        <h4 class="cinzel text-2xl text-gold">Diamond Sets</h4>
-                    </div>
-                </div>
-                <div class="group relative overflow-hidden gold-border aspect-[3/4]">
-                    <img src="https://images.unsplash.com/photo-1635767798638-3e25273a8236?q=80&w=1920&auto=format&fit=crop" class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-110 opacity-70">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-8 text-left">
-                        <h4 class="cinzel text-2xl text-gold">Heritage Silver</h4>
-                    </div>
-                </div>
-            </div>
+    <section id="about">
+      <div class="container about-grid">
+        <div>
+          <div class="eyebrow">Our Story</div><h2>Tradition, trust & <span class="gold">timeless beauty.</span></h2>
+          <div class="about-copy">
+            <p>Welcome to Maa Vaishnav Jewellers. We celebrate the beauty of fine jewellery and the moments that make life special.</p>
+            <p>Explore our collection and contact us for the latest designs and price details. We look forward to welcoming you.</p>
+          </div>
+          <div class="feature-row">
+            <div class="feature"><strong>22K Gold</strong><span>Gold jewellery collection</span></div>
+            <div class="feature"><strong>Diamonds</strong><span>Elegant designs</span></div>
+            <div class="feature"><strong>Personal Care</strong><span>Customer-first service</span></div>
+          </div>
         </div>
+        <div><img class="shop-photo" src="shop.png" alt="Maa Vaishnav Jewellers shop" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+          <div class="gallery-item" style="display:none;height:430px"><div><span>✧</span>Add your shop photo as <b>shop.png</b> beside this HTML file.</div></div>
+        </div>
+      </div>
     </section>
 
-    <section id="contact" class="py-24 bg-black px-6">
-        <div class="max-w-3xl mx-auto text-center">
-            <h3 class="cinzel text-4xl mb-12 gold-gradient uppercase">Connect With Us</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div class="p-8 gold-border bg-[#0a0a0a]">
-                    <h5 class="cinzel text-gold text-lg mb-4 uppercase tracking-widest">Our Address</h5>
-                    <a href="https://maps.app.goo.gl/1ZAeZoCw5m4jsRQW7" target="_blank" class="gold-button text-black px-8 py-2 rounded-sm font-bold text-xs uppercase tracking-widest inline-block">Open Maps</a>
-                </div>
-                <div class="p-8 gold-border bg-[#0a0a0a]">
-                    <h5 class="cinzel text-gold text-lg mb-4 uppercase tracking-widest">Direct Line</h5>
-                    <a href="tel:09935355755" class="gold-button text-black px-8 py-2 rounded-sm font-bold text-xs uppercase tracking-widest inline-block">09935355755</a>
-                </div>
-            </div>
+    <section id="collections">
+      <div class="container">
+        <div class="section-intro"><div class="eyebrow">Curated for You</div><h2>Our <span class="gold">Collections</span></h2><p>Discover beautiful jewellery styles for celebrations, gifting and everyday elegance. Contact us for current designs and availability.</p></div>
+        <div class="collection-grid">
+          <article class="collection-card"><h3>Gold Jewellery</h3><p>Classic and contemporary gold designs.</p></article>
+          <article class="collection-card"><h3>Diamond Jewellery</h3><p>Graceful designs for special moments.</p></article>
+          <article class="collection-card"><h3>Precious Gems</h3><p>Distinctive pieces with timeless appeal.</p></article>
         </div>
+      </div>
     </section>
 
-    <footer class="bg-black py-16 px-6 border-t border-white/10 text-center">
-        <h4 class="cinzel text-2xl gold-gradient font-bold mb-2 uppercase">MAA VAISHNAV JEWELLERS</h4>
-        <p class="text-gray-500 text-xs tracking-[0.5em] uppercase mb-8">Purity in every grain</p>
-        <p class="text-gray-600 text-[10px] uppercase tracking-[0.3em]">Owner: Mr. Vinay Soni | Built by Mr. Ansh Soni</p>
-    </footer>
-
-    <div class="wa-float-container group">
-        <div id="waBubble" class="wa-bubble">
-            <p class="cinzel text-gold text-xs uppercase font-bold tracking-widest">Chat with us</p>
+    <section id="gallery">
+      <div class="container">
+        <div class="section-intro"><div class="eyebrow">A Glimpse of Elegance</div><h2>Gold <span class="gold">Gallery</span></h2><p>Gold-focused collection highlights. Replace the sample tiles below with your own jewellery photographs whenever ready.</p></div>
+        <div class="gallery-grid">
+          <div class="gallery-item"><div><span>✧</span>Gold Jewellery</div></div>
+          <div class="gallery-item"><div><span>❖</span>Traditional Gold Designs</div></div>
+          <div class="gallery-item"><div><span>✥</span>Modern Gold Styles</div></div>
         </div>
-        <a href="https://wa.me/919935355755?text=Namaste%20🙏%0A%20Main%20aapki%20jewelry%20collection%20mein%20interested%20hoon%20✨%0A%20Kripya%20latest%20designs%20aur%20price%20details%20share%20karein%20💍%0A%20Dhanyavaad%20😊" target="_blank" class="wa-button" aria-label="Chat on WhatsApp">
-            <div class="wa-pulse"></div>
-            <svg class="wa-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.585 1.961.893 3.056.893 3.179 0 5.769-2.587 5.769-5.766.001-3.181-2.59-5.78-5.77-5.78zm0 .9c2.665 0 4.846 2.182 4.846 4.881 0 2.67-2.182 4.866-4.847 4.866a4.835 4.835 0 0 1-2.484-.69l-.178-.106-1.593.417.426-1.554-.108-.172a4.815 4.815 0 0 1-.762-2.761c0-2.699 2.181-4.881 4.86-4.881zM17.8 1.8L16.2 0H7.8L6.2 1.8l-4 4.5v13.5l2 2h15.6l2-2V6.3l-4-4.5zM12 24c-6.627 0-12-5.373-12-12S5.373 0 12 0s12 5.373 12 12-5.373 12-12 12z" fill-rule="evenodd" clip-rule="evenodd" style="display:none;"/> <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-            </svg>
-        </a>
+      </div>
+    </section>
+
+    <section id="hours">
+      <div class="container">
+        <div class="section-intro"><div class="eyebrow">Plan Your Visit</div><h2>Opening <span class="gold">Hours</span></h2><p>We look forward to seeing you at our store.</p></div>
+        <div class="hours-wrap">
+          <table class="hours-table">
+            <thead><tr><th>Day</th><th>Opening hours</th></tr></thead>
+            <tbody>
+              <tr><td>Monday</td><td>8 AM – 6 PM</td></tr>
+              <tr><td>Tuesday</td><td>8 AM – 6 PM*</td></tr>
+              <tr><td>Wednesday</td><td>8 AM – 1 PM</td></tr>
+              <tr><td>Thursday</td><td>8 AM – 6 PM</td></tr>
+              <tr><td>Friday</td><td>8 AM – 6 PM</td></tr>
+              <tr><td>Saturday</td><td>8 AM – 6 PM</td></tr>
+              <tr><td>Sunday</td><td>8 AM – 6 PM</td></tr>
+            </tbody>
+          </table>
+          <p class="hours-note">*Tuesday hours might differ on Guru Nanak Gurpurab.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="reviews">
+      <div class="container">
+        <div class="section-intro"><div class="eyebrow">Your Experience Matters</div><h2>Customer <span class="gold">Reviews</span></h2></div>
+        <div class="reviews-note">
+          <p>Visited Maa Vaishnav Jewellers? We value your feedback. Share your experience with us or check the store's Google listing for customer reviews.</p>
+          <div class="contact-links"><a class="btn outline" href="https://maps.app.goo.gl/1ZAeZoCw5m4jsRQW7" target="_blank" rel="noopener">View Google Listing</a></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="section-intro"><div class="eyebrow">We Are Here to Help</div><h2>Get in <span class="gold">Touch</span></h2><p>Ask about the latest jewellery designs, availability or price details.</p></div>
+        <div class="contact-grid">
+          <div class="contact-card">
+            <h3>Visit or Call Us</h3>
+            <p><span class="gold">Phone:</span> <a href="tel:09935355755">09935355755</a></p>
+            <p><span class="gold">Store:</span> Maa Vaishnav Jewellers</p>
+            <div class="contact-links">
+              <a class="btn" href="tel:09935355755">Call Now</a>
+              <a class="btn outline" href="https://maps.app.goo.gl/1ZAeZoCw5m4jsRQW7" target="_blank" rel="noopener">Get Directions</a>
+              <a class="btn outline" href="https://wa.me/919935355755?text=Namaste%20🙏%0A%20Main%20aapki%20jewelry%20collection%20mein%20interested%20hoon%20✨%0A%20Kripya%20latest%20designs%20aur%20price%20details%20share%20karein%20💍%0A%20Dhanyavaad%20😊" target="_blank" rel="noopener">WhatsApp</a>
+            </div>
+          </div>
+          <div class="contact-card">
+            <h3>Send a Website Message</h3>
+            <p>Your message is submitted to the website's own Admin Inbox. No SMS, email, WhatsApp API or third-party messaging service is used.</p>
+            <form class="message-form" id="messageForm">
+              <input type="text" name="name" placeholder="Your name" maxlength="80" required>
+              <input type="tel" name="phone" placeholder="Phone number (optional)" maxlength="25">
+              <textarea name="message" placeholder="Write your message..." maxlength="2000" required></textarea>
+              <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+              <button class="btn" type="submit">Send Message</button>
+              <div class="form-status" id="formStatus" role="status"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="brand" style="justify-content:center"><div class="brand-mark">✧</div><div><div class="brand-name">Maa Vaishnav Jewellers</div><div class="brand-sub">Purity in every grain</div></div></div>
+      <div class="footer-links"><a href="#home">Home</a><a href="#about">About</a><a href="#hours">Opening Hours</a><a href="#contact">Contact</a></div>
+      <div class="owner">Owner: Mr. Vinay Soni | Built by Mr. Ansh Soni</div>
+      <p style="font:11px Arial,sans-serif;margin-top:12px">© <span id="year"></span> Maa Vaishnav Jewellers. All rights reserved.</p>
     </div>
+  </footer>
 
-    <script>
-        // Scroll Indicator
-        window.onscroll = function() {
-            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            var scrolled = (winScroll / height) * 100;
-            const indicator = document.getElementById("scrollIndicator");
-            if(indicator) indicator.style.height = scrolled + "%";
-        };
+  <a class="whatsapp-float" href="https://wa.me/919935355755?text=Namaste%20🙏%0A%20Main%20aapki%20jewelry%20collection%20mein%20interested%20hoon%20✨%0A%20Kripya%20latest%20designs%20aur%20price%20details%20share%20karein%20💍%0A%20Dhanyavaad%20😊" target="_blank" rel="noopener">WhatsApp</a>
 
-        // Genie Nav Toggle Logic
-        const mobileTrigger = document.getElementById('mobileTrigger');
-        const genieNav = document.getElementById('genieNav');
-        const burgerIcon = document.getElementById('burgerIcon');
-        const bar1 = document.getElementById('bar1');
-        const bar2 = document.getElementById('bar2');
-        let menuActive = false;
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const mainNav = document.getElementById('mainNav');
+    menuBtn.addEventListener('click', () => mainNav.classList.toggle('open'));
+    mainNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => mainNav.classList.remove('open')));
+    document.getElementById('year').textContent = new Date().getFullYear();
 
-        mobileTrigger.addEventListener('click', () => {
-            menuActive = !menuActive;
-            
-            if (menuActive) {
-                genieNav.classList.add('is-open');
-                document.body.classList.add('no-scroll');
-                burgerIcon.style.transform = "rotate(180deg)";
-                bar1.setAttribute('d', 'M6 18L18 6');
-                bar2.setAttribute('d', 'M6 6l12 12');
-            } else {
-                genieNav.classList.remove('is-open');
-                document.body.classList.remove('no-scroll');
-                burgerIcon.style.transform = "rotate(0deg)";
-                bar1.setAttribute('d', 'M4 8h16');
-                bar2.setAttribute('d', 'M4 16h16');
-            }
+    // This endpoint belongs to your own website server (server.js), not an external API.
+    // Keep the Express backend running to save messages in the /admin inbox.
+    const messageForm = document.getElementById('messageForm');
+    const formStatus = document.getElementById('formStatus');
+    messageForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const submitButton = messageForm.querySelector('button[type="submit"]');
+      const formData = new FormData(messageForm);
+      const payload = {
+        name: formData.get('name'),
+        phone: formData.get('phone'),
+        message: formData.get('message'),
+        website: formData.get('website')
+      };
+      submitButton.disabled = true;
+      formStatus.textContent = 'Sending...';
+      try {
+        const response = await fetch('/api/messages', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
         });
-
-        // Close menu on link click
-        document.querySelectorAll('.genie-item').forEach(link => {
-            link.addEventListener('click', () => {
-                menuActive = false;
-                genieNav.classList.remove('is-open');
-                document.body.classList.remove('no-scroll');
-                burgerIcon.style.transform = "rotate(0deg)";
-                bar1.setAttribute('d', 'M4 8h16');
-                bar2.setAttribute('d', 'M4 16h16');
-            });
-        });
-
-        // Auto-show WhatsApp bubble after 3 seconds
-        setTimeout(() => {
-            const bubble = document.getElementById('waBubble');
-            if(bubble) bubble.classList.add('show-initially');
-            
-            // Hide it again after 5 seconds to not be annoying
-            setTimeout(() => {
-                if(bubble) bubble.classList.remove('show-initially');
-            }, 5000);
-        }, 3000);
-    </script>
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.ok) throw new Error(result.error || 'Message could not be sent.');
+        messageForm.reset();
+        formStatus.textContent = 'Thank you! Your message has been sent.';
+      } catch (error) {
+        formStatus.textContent = 'Could not send message. Please call or WhatsApp the shop.';
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
